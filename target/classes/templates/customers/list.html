@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('Customers')}"></head>
+<body>
+<div th:replace="~{fragments/layout :: sidebar('customers')}"></div>
+
+<div class="main-content">
+    <div class="topbar">
+        <div>
+            <h5 class="fw-bold mb-0">Customer Directory</h5>
+            <small class="text-muted">Manage guest records</small>
+        </div>
+        <a th:href="@{/customers/new}" class="btn btn-primary"><i class="bi bi-person-plus me-1"></i>Add Customer</a>
+    </div>
+
+    <div th:if="${success}" class="alert alert-success alert-dismissible fade show">
+        <i class="bi bi-check-circle me-1"></i> <span th:text="${success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+    <div th:if="${error}" class="alert alert-danger alert-dismissible fade show">
+        <i class="bi bi-exclamation-triangle me-1"></i> <span th:text="${error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table mb-0">
+                <thead>
+                    <tr><th>Name</th><th>Email</th><th>Phone</th><th>ID Proof</th><th>Address</th><th>Actions</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:if="${#lists.isEmpty(customers)}">
+                        <td colspan="6" class="text-center text-muted py-3">No customers found. <a th:href="@{/customers/new}">Add one</a>.</td>
+                    </tr>
+                    <tr th:each="c : ${customers}">
+                        <td><strong th:text="${c.name}">-</strong></td>
+                        <td th:text="${c.email}">-</td>
+                        <td th:text="${c.phone}">-</td>
+                        <td><code th:text="${c.idProof}">-</code></td>
+                        <td class="text-muted small" th:text="${c.address ?: '-'}">-</td>
+                        <td>
+                            <a th:href="@{/customers/edit/{id}(id=${c.id})}" class="btn btn-sm btn-outline-primary me-1">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                            <a th:href="@{/customers/delete/{id}(id=${c.id})}"
+                               class="btn btn-sm btn-outline-danger"
+                               onclick="return confirm('Delete this customer?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
